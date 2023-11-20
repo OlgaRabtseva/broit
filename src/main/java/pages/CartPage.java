@@ -5,12 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import utils.TestContext;
 
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class CartPage extends Page {
 
@@ -45,12 +45,19 @@ public class CartPage extends Page {
     }
 
     public void cleanUpCart() {
-        wait.until(visibilityOf(myStoreLogo)).click();
-        wait.until(visibilityOf(cartBtn)).click();
-        wait.until(visibilityOf(removeItemBtn.get(0)));
-        for (int i = 0; i < removeItemBtn.size(); i++) {
-            removeItemBtn.get(0).click();
-            Selenide.sleep(2000);
+        if (cartBtn.isEnabled()) {
+            wait.until(visibilityOf(myStoreLogo)).click();
+            wait.until(visibilityOf(cartBtn)).click();
+            wait.until(visibilityOf(removeItemBtn.get(0)));
+//        for (int i = 0; i < removeItemBtn.size(); i++) {
+//            removeItemBtn.get(i).click();
+//            Selenide.sleep(2000);
+//        }
+            while (!getTestContext().getDriver()
+                    .findElements(By.xpath("//a[@class='remove-from-cart']")).isEmpty()) {
+                removeItemBtn.get(0).click();
+                Selenide.sleep(2000);
+            }
         }
     }
 

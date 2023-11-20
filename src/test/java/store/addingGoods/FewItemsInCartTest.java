@@ -1,6 +1,6 @@
 package store.addingGoods;
 
-import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.CartPage;
@@ -36,6 +36,7 @@ public class FewItemsInCartTest extends TestSetup {
         cartPage = mainPage.goToCart();
         assertEquals("The cart should contain 2 rows", 2, cartPage.getItemsAmount());
         assertTrue("Personal info should be shown", cartPage.startCheckoutSteps());
+        cartPage.cleanUpCart();
     }
 
     @Test
@@ -49,6 +50,7 @@ public class FewItemsInCartTest extends TestSetup {
         cartPage = mainPage.goToCart();
         assertEquals("The cart should contain 1 row", 1, cartPage.getItemsAmount());
         assertTrue("Personal info should be shown", cartPage.startCheckoutSteps());
+        cartPage.cleanUpCart();
     }
 
     @Test
@@ -62,11 +64,12 @@ public class FewItemsInCartTest extends TestSetup {
         cartPage.changeItemQuantity(50);
         assertEquals("The cart should contain 50 items", 50, mainPage.getItemCountFromCart());
         assertTrue("Personal info should be shown", cartPage.startCheckoutSteps());
+        cartPage.cleanUpCart();
     }
 
-    @AfterMethod
+    @AfterClass
     public void cleanUpTheCart() {
-        if (cartPage != null) {
+        if (cartPage != null && cartPage.getItemsAmount() > 0) {
             cartPage.cleanUpCart();
         }
     }
